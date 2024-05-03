@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieCollectionApi.Services;
 
 namespace MovieCollectionApi.Controllers;
+
 [Route("movies")]
 [ApiController]
 public class MovieController : ControllerBase
