@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using MovieCollectionApi.Dto;
 using MovieCollectionApi.Services;
 
 namespace MovieCollectionApi.Controllers;
-
 [Route("movies")]
 [ApiController]
 public class MovieController : ControllerBase
@@ -18,9 +16,27 @@ public class MovieController : ControllerBase
     [HttpGet("seach")]
     public async Task<IActionResult> SearchMovie([FromQuery] string title)
     {   
-        MovieSeachResponseDto? movieData = await _movieProviderService.SearchForMoviesWithTitle(title);
-        if (movieData is null)
+        dynamic? movies = await _movieProviderService.SearchForMoviesWithTitle(title);
+        if (movies is null)
             return NotFound();
-        return Ok(movieData);
+        return Ok(movies);
+    }
+
+    [HttpGet("{movieId}")]
+    public async Task<IActionResult> GetMovie(int movieId)
+    {
+        dynamic? movie = await _movieProviderService.FetchMovieDetailById(movieId);
+        if (movie is null)
+            return NotFound();
+        return Ok(movie);
+    }
+
+    [HttpGet("{movieId}/recommendations")]
+    public async Task<IActionResult> GetMovieRecommendation(int movieId)
+    {
+        dynamic? movie = await _movieProviderService.FetchRecommendedMoviesBasedOnMovieId(movieId);
+        if (movie is null)
+            return NotFound();
+        return Ok(movie);
     }
 }

@@ -1,6 +1,5 @@
 using System.Text.Json;
 using System.Web;
-using MovieCollectionApi.Dto;
 
 namespace MovieCollectionApi.Services;
 
@@ -42,31 +41,31 @@ public class MovieProviderService
 
         if (response.IsSuccessStatusCode)
         {
-            var data = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(data);
+            string data = await response.Content.ReadAsStringAsync();            
+            return JsonSerializer.Deserialize<dynamic>(data);
         }
         return null;
     }
 
-    public async Task<MovieSeachResponseDto?> SearchForMoviesWithTitle(string title)
+    public async Task<dynamic?> SearchForMoviesWithTitle(string title)
     {   
-        return await SendGetRequest<MovieSeachResponseDto>(
+        return await SendGetRequest<dynamic>(
             endpointPath: "/search/movie",
             queryParam: $"{title}"
         );
     }
 
-    public async Task<MovieDetailResponseDto?> FetchMovieDetailById(int movieId)
+    public async Task<dynamic?> FetchMovieDetailById(int movieId)
     {
-        return await SendGetRequest<MovieDetailResponseDto>(
+        return await SendGetRequest<dynamic>(
             endpointPath: $"/movie/{movieId}",
             queryParam: null
         );
     }
 
-    public async Task<MovieRecommendationResponseDto?> FetchRecommendedMoviesBasedOnMovieId(int movieId)
+    public async Task<dynamic?> FetchRecommendedMoviesBasedOnMovieId(int movieId)
     {
-        return await SendGetRequest<MovieRecommendationResponseDto>(
+        return await SendGetRequest<dynamic>(
             endpointPath: $"/movie/{movieId}/recommendations",
             queryParam: null
         );
