@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Text.Json;
 using System.Web;
 using MovieCollectionApi.Dto;
@@ -18,28 +17,58 @@ public class MovieProviderService
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
     }
 
-    public async Task<MovieSeachResponseDto?> SearchForMoviesWithTitle(string title)
-    {   
-        var uriBuilder = new UriBuilder(_baseUrl + "/search/movie");
+    private string PrepareAbsoluteUri(string path, string? queryParam)
+    {
+        string url = _baseUrl + path;
+        var uriBuilder = new UriBuilder(url);
 
         // prepare query string
-        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-        query["query"] = title;
-        uriBuilder.Query = query.ToString();
+        if (queryParam is not null)
+        {
+            // e.g: https://baseUrl?query=example
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["query"] = queryParam;
+            uriBuilder.Query = query.ToString();
+        }
 
-        string absoluteUri = uriBuilder.ToString();
+        return uriBuilder.ToString();
+    }
+
+    private async Task<T?> SendGetRequest<T>(string endpointPath, string? queryParam) where T: class
+    {
+
+        string absoluteUri = PrepareAbsoluteUri(endpointPath, queryParam);
         var response = await _httpClient.GetAsync(absoluteUri);
 
         if (response.IsSuccessStatusCode)
         {
             var data = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<MovieSeachResponseDto>(data);
+            return JsonSerializer.Deserialize<T>(data);
         }
         return null;
     }
 
-    // fetch movie detail based on movie_id
+    public async Task<MovieSeachResponseDto?> SearchForMoviesWithTitle(string title)
+    {   
+        return await SendGetRequest<MovieSeachResponseDto>(
+            endpointPath: "/search/movie",
+            queryParam: $"{title}"
+        );
+    }
 
-    // fetch recommended movies
+    public async Task<MovieDetailResponseDto?> FetchMovieDetailById(int movieId)
+    {
+        return await SendGetRequest<MovieDetailResponseDto>(
+            endpointPath: $"/movie/{movieId}",
+            queryParam: null
+        );
+    }
 
+    public async Task<MovieRecommendationResponseDto?> FetchRecommendedMoviesBasedOnMovieId(int movieId)
+    {
+        return await SendGetRequest<MovieRecommendationResponseDto>(
+            endpointPath: $"/movie/{movieId}/recommendations",
+            queryParam: null
+        );
+    }
 }
