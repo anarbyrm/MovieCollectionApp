@@ -1,3 +1,4 @@
+using MovieCollectionApi.Repository;
 using MovieCollectionApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<HttpClient>();
 builder.Services.AddSingleton<MovieProviderService>();
+builder.Services.AddSingleton<CollectionService>();
+builder.Services.AddSingleton<CollectionRepository>();
 
 var app = builder.Build();
 
