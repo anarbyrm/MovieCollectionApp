@@ -1,2 +1,0 @@
-namespace MovieCollectionApi.Repository;
-
