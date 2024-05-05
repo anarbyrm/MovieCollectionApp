@@ -6,13 +6,14 @@ namespace MovieCollectionApi.Services;
 public class MovieProviderService
 {   
     private readonly HttpClient _httpClient;
+    private readonly IConfiguration _config;
     private readonly string _baseUrl = "https://api.themoviedb.org/3";
 
-    public MovieProviderService(HttpClient httpClient)
+    public MovieProviderService(HttpClient httpClient, IConfiguration config)
     {
+        _config = config;
         _httpClient = httpClient;
-        // todo: add Configuration service for env variables
-        _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjYjQzMjFlZGQwZDk5YWIxOGZkYjJiNDdjMTU5ZDk2MSIsInN1YiI6IjY2MzNiMzU1YWY0MzI0MDEyYjU0MjI5NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-ADDYUC5x8qBO0dV7vRLqXGAYz3nYP27zIFYuQoMalE");
+        _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_config["access_token"]}");
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
     }
 

@@ -9,11 +9,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<HttpClient>();
-builder.Services.AddSingleton<MovieProviderService>();
 
-builder.Services.AddSingleton<MovieDbContext>();
+builder.Services.AddDbContext<MovieDbContext>(ServiceLifetime.Singleton);
 builder.Services.AddSingleton<CollectionRepository>();
 builder.Services.AddSingleton<CollectionService>();
+builder.Services.AddSingleton<MovieProviderService>();
 
 var app = builder.Build();
 

@@ -3,13 +3,13 @@ using MovieCollectionApi.Services;
 
 namespace MovieCollectionApi.Controllers;
 
-[Route("collections")]
+[Route("api/v1/[controller]")]
 [ApiController]
-public class CollectionController : ControllerBase
+public class CollectionsController : ControllerBase
 {
     public readonly CollectionService _service;
 
-    public CollectionController(CollectionService service)
+    public CollectionsController(CollectionService service)
     {
         _service = service;
     }
