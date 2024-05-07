@@ -30,9 +30,20 @@ public class CollectionService
     
     public bool Create(CreateCollectionDto dto)
     {
+        // todo: add automapper 
         Collection newCollection = new() {
             Title = dto.Title
         };
         return _repository.Create(newCollection);
+    }
+
+    public bool? Update(UpdateCollectionDto dto, int id)
+    {
+        var collection = _repository.GetOneById(id);
+        if (collection is null)
+            return null;
+        // todo: add automapper 
+        collection.Title = dto.Title;
+        return _repository.Update(collection);
     }
 }

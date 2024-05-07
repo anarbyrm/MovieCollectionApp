@@ -38,9 +38,18 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateCollection([FromBody] CreateCollectionDto dto)
+    public IActionResult CreateCollection([FromBody] CreateCollectionDto Dto)
     {
-        bool collectionCreated = _service.Create(dto);
+        bool collectionCreated = _service.Create(Dto);
         return collectionCreated ? Created() : BadRequest();
+    }
+
+    [HttpPut("{Id}")]
+    public IActionResult UpdateCollection([FromBody] UpdateCollectionDto Dto, int Id)
+    {
+        bool? collectionUpdated = _service.Update(Dto, Id);
+        if (collectionUpdated is null)
+            return NotFound();
+        return (bool)collectionUpdated ? Ok() : BadRequest();
     }
 }
