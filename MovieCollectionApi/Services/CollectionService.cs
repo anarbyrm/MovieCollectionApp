@@ -37,13 +37,22 @@ public class CollectionService
         return _repository.Create(newCollection);
     }
 
-    public bool? Update(UpdateCollectionDto dto, int id)
+    public bool? Update(UpdateCollectionDto Dto, int Id)
     {
-        var collection = _repository.GetOneById(id);
+        Collection? collection = GetOne(Id);
         if (collection is null)
             return null;
+
         // todo: add automapper 
-        collection.Title = dto.Title;
+        collection.Title = Dto.Title;
         return _repository.Update(collection);
+    }
+
+    public bool? Delete(int Id)
+    {
+        Collection? collection = GetOne(Id);
+        if (collection is null)
+            return null;
+        return _repository.Delete(collection);
     }
 }

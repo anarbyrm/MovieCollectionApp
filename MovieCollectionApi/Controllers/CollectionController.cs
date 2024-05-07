@@ -27,7 +27,7 @@ public class CollectionsController : ControllerBase
         return Ok(collection);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{Id}")]
     public IActionResult GetOneCollection(int Id)
     {
         var collection = _service.GetOne(Id);
@@ -51,5 +51,14 @@ public class CollectionsController : ControllerBase
         if (collectionUpdated is null)
             return NotFound();
         return (bool)collectionUpdated ? Ok() : BadRequest();
+    }
+
+    [HttpDelete("{Id}")]
+    public IActionResult DeleteCollection(int Id)
+    {
+        bool? collectionDeleted = _service.Delete(Id);
+        if (collectionDeleted is null)
+            return NotFound();
+        return (bool)collectionDeleted ? NoContent() : BadRequest();
     }
 }
