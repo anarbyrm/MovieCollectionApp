@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MovieCollectionApi.Dto;
 using MovieCollectionApi.Services;
 
 namespace MovieCollectionApi.Controllers;
@@ -34,5 +35,12 @@ public class CollectionsController : ControllerBase
         if (collection is null)
             return NotFound();
         return Ok(collection);
+    }
+
+    [HttpPost]
+    public IActionResult CreateCollection([FromBody] CreateCollectionDto dto)
+    {
+        bool collectionCreated = _service.Create(dto);
+        return collectionCreated ? Created() : BadRequest();
     }
 }

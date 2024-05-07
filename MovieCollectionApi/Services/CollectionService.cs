@@ -1,3 +1,4 @@
+using MovieCollectionApi.Dto;
 using MovieCollectionApi.Models;
 using MovieCollectionApi.Repository;
 
@@ -27,4 +28,11 @@ public class CollectionService
         return _repository.GetOneByTitle(Title);
     }
     
+    public bool Create(CreateCollectionDto dto)
+    {
+        Collection newCollection = new() {
+            Title = dto.Title
+        };
+        return _repository.Create(newCollection);
+    }
 }
