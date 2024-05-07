@@ -8,7 +8,8 @@ public interface ICollectionRepository
     List<Collection> GetAll();
     Collection? GetOneById(int Id);
     Collection? GetOneByTitle(string title);
-    void Create(Collection collection);
-    void Delete(int Id);
-    void Update(int Id, Collection collection);
+    bool Create(Collection newCollection);
+    bool Delete(Collection collection);
+    bool Update(Collection updatedCollection);
+    bool Save();
 }

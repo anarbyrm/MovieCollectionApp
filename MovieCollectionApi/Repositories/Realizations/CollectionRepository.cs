@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using MovieCollectionApi.Data;
 using MovieCollectionApi.Models;
 
@@ -20,26 +19,42 @@ public class CollectionRepository : ICollectionRepository
 
     public Collection? GetOneById(int Id)
     {
-        return _context.Collections.FirstOrDefault(c => c.Id == Id);
+        return _context.Collections.FirstOrDefault(collection => collection.Id == Id);
     }
 
     public Collection? GetOneByTitle(string Title)
     {
-        return _context.Collections.FirstOrDefault(c => c.Title == Title);
+        return _context.Collections.FirstOrDefault(collection => collection.Title == Title);
     }
 
-    public void Create(Collection collection)
+    public bool Create(Collection newCollection)
     {
-        throw new NotImplementedException();
+        _context.Add(newCollection);
+        return Save();
     }
 
-    public void Delete(int Id)
+    public bool Delete(Collection collection)
     {
-        throw new NotImplementedException();
+        _context.Collections.Remove(collection);
+        return Save();
     }
 
-    public void Update(int Id, Collection collection)
+    public bool Update(Collection updatedCollection)
     {
-        throw new NotImplementedException();
+        _context.Collections.Update(updatedCollection);
+        return Save();
+    }
+
+    public bool Save()
+    {
+        try
+        {
+            _context.SaveChanges();
+        }
+        catch
+        {
+            return false;
+        }
+        return true;
     }
 }
