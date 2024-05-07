@@ -16,21 +16,21 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllCollections([FromQuery] string? Title)
+    public IActionResult GetAllCollections([FromQuery] string? title)
     {
-        if (Title is null)
+        if (title is null)
             return Ok(_service.GetAll());
 
-        var collection = _service.GetOne(Title);
+        var collection = _service.GetOne(title);
         if (collection is null)
             return NotFound();
         return Ok(collection);
     }
 
-    [HttpGet("{Id}")]
-    public IActionResult GetOneCollection(int Id)
+    [HttpGet("{id}")]
+    public IActionResult GetOneCollection(int id)
     {
-        var collection = _service.GetOne(Id);
+        var collection = _service.GetOne(id);
 
         if (collection is null)
             return NotFound();
@@ -38,25 +38,25 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateCollection([FromBody] CreateCollectionDto Dto)
+    public IActionResult CreateCollection([FromBody] CreateCollectionDto dto)
     {
-        bool collectionCreated = _service.Create(Dto);
+        bool collectionCreated = _service.Create(dto);
         return collectionCreated ? Created() : BadRequest();
     }
 
-    [HttpPut("{Id}")]
-    public IActionResult UpdateCollection([FromBody] UpdateCollectionDto Dto, int Id)
+    [HttpPut("{id}")]
+    public IActionResult UpdateCollection([FromBody] UpdateCollectionDto dto, int id)
     {
-        bool? collectionUpdated = _service.Update(Dto, Id);
+        bool? collectionUpdated = _service.Update(dto, id);
         if (collectionUpdated is null)
             return NotFound();
         return (bool)collectionUpdated ? Ok() : BadRequest();
     }
 
-    [HttpDelete("{Id}")]
-    public IActionResult DeleteCollection(int Id)
+    [HttpDelete("{id}")]
+    public IActionResult DeleteCollection(int id)
     {
-        bool? collectionDeleted = _service.Delete(Id);
+        bool? collectionDeleted = _service.Delete(id);
         if (collectionDeleted is null)
             return NotFound();
         return (bool)collectionDeleted ? NoContent() : BadRequest();

@@ -18,14 +18,14 @@ public class CollectionService
         return _repository.GetAll();
     }
 
-    public Collection? GetOne(int Id)
+    public Collection? GetOne(int id)
     {
-        return _repository.GetOneById(Id);
+        return _repository.GetOneById(id);
     }
 
-    public Collection? GetOne(string Title)
+    public Collection? GetOne(string title)
     {
-        return _repository.GetOneByTitle(Title);
+        return _repository.GetOneByTitle(title);
     }
     
     public bool Create(CreateCollectionDto dto)
@@ -37,20 +37,20 @@ public class CollectionService
         return _repository.Create(newCollection);
     }
 
-    public bool? Update(UpdateCollectionDto Dto, int Id)
+    public bool? Update(UpdateCollectionDto dto, int id)
     {
-        Collection? collection = GetOne(Id);
+        Collection? collection = GetOne(id);
         if (collection is null)
             return null;
 
         // todo: add automapper 
-        collection.Title = Dto.Title;
+        collection.Title = dto.Title;
         return _repository.Update(collection);
     }
 
-    public bool? Delete(int Id)
+    public bool? Delete(int id)
     {
-        Collection? collection = GetOne(Id);
+        Collection? collection = GetOne(id);
         if (collection is null)
             return null;
         return _repository.Delete(collection);

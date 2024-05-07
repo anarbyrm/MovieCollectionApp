@@ -17,14 +17,14 @@ public class CollectionRepository : ICollectionRepository
         return _context.Collections.ToList();
     }
 
-    public Collection? GetOneById(int Id)
+    public Collection? GetOneById(int id)
     {
-        return _context.Collections.FirstOrDefault(collection => collection.Id == Id);
+        return _context.Collections.FirstOrDefault(collection => collection.Id == id);
     }
 
-    public Collection? GetOneByTitle(string Title)
+    public Collection? GetOneByTitle(string title)
     {
-        return _context.Collections.FirstOrDefault(collection => collection.Title == Title);
+        return _context.Collections.FirstOrDefault(collection => collection.Title == title);
     }
 
     public bool Create(Collection newCollection)
