@@ -22,19 +22,14 @@ public class CollectionsController : ControllerBase
             return Ok(_service.GetAll());
 
         var collection = _service.GetOne(title);
-        if (collection is null)
-            return NotFound();
-        return Ok(collection);
+        return collection is null ? NotFound() : Ok(collection);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetOneCollection(int id)
     {
         var collection = _service.GetOne(id);
-
-        if (collection is null)
-            return NotFound();
-        return Ok(collection);
+        return collection is null ? NotFound() : Ok();
     }
 
     [HttpPost]
