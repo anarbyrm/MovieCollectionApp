@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 
 MovieData.db
 *.db*
+.vscode/

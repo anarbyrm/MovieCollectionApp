@@ -13,19 +13,14 @@ public class CollectionService
         _repository = repository;
     }
 
-    public async Task<List<Collection>> GetAllAsync()
+    public async Task<List<Collection>> GetAllAsync(string? query)
     {
-        return await _repository.GetAllAsync();
+        return await _repository.GetAllAsync(query);
     }
 
     public async Task<Collection?> GetOneAsync(int id)
     {
         return await _repository.GetOneByIdAsync(id);
-    }
-
-    public async Task<Collection?> GetOne(string title)
-    {
-        return await _repository.GetOneByTitleAsync(title);
     }
     
     public async Task<bool> CreateAsync(CreateCollectionDto dto)

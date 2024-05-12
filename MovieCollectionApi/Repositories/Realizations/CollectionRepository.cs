@@ -13,19 +13,17 @@ public class CollectionRepository : ICollectionRepository
         _context = context;
     }
 
-    public async Task<List<Collection>> GetAllAsync()
+    public async Task<List<Collection>> GetAllAsync(string? query)
     {
-        return await _context.Collections.ToListAsync();
+        IQueryable<Collection> collectionQuery = _context.Collections;
+        if (query is not null)
+            collectionQuery = collectionQuery.Where(collection => collection.Title.Contains(query));
+        return await collectionQuery.ToListAsync();
     }
 
     public async Task<Collection?> GetOneByIdAsync(int id)
     {
         return await _context.Collections.FirstOrDefaultAsync(collection => collection.Id == id);
-    }
-
-    public async Task<Collection?> GetOneByTitleAsync(string title)
-    {
-        return await _context.Collections.FirstOrDefaultAsync(collection => collection.Title == title);
     }
 
     public async Task<bool> CreateAsync(Collection newCollection)

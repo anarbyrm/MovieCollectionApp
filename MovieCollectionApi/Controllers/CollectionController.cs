@@ -18,18 +18,15 @@ public class CollectionsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] string? title)
     {
-        if (title is null)
-            return Ok(await _service.GetAllAsync());
-
-        var collection = await _service.GetOne(title);
-        return collection is null ? NotFound() : Ok(collection);
+        var collection = await _service.GetAllAsync(title);
+        return Ok(collection);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
         var collection = await _service.GetOneAsync(id);
-        return collection is null ? NotFound() : Ok();
+        return collection is null ? NotFound() : Ok(collection);
     }
 
     [HttpPost]
