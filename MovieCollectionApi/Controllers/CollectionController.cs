@@ -16,42 +16,42 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllCollections([FromQuery] string? title)
+    public async Task<IActionResult> Get([FromQuery] string? title)
     {
         if (title is null)
-            return Ok(_service.GetAll());
+            return Ok(await _service.GetAllAsync());
 
-        var collection = _service.GetOne(title);
+        var collection = await _service.GetOne(title);
         return collection is null ? NotFound() : Ok(collection);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetOneCollection(int id)
+    public async Task<IActionResult> Get(int id)
     {
-        var collection = _service.GetOne(id);
+        var collection = await _service.GetOneAsync(id);
         return collection is null ? NotFound() : Ok();
     }
 
     [HttpPost]
-    public IActionResult CreateCollection([FromBody] CreateCollectionDto dto)
+    public async Task<IActionResult> Post([FromBody] CreateCollectionDto dto)
     {
-        bool collectionCreated = _service.Create(dto);
+        bool collectionCreated = await _service.CreateAsync(dto);
         return collectionCreated ? Created() : BadRequest();
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateCollection([FromBody] UpdateCollectionDto dto, int id)
+    public async Task<IActionResult> Put([FromBody] UpdateCollectionDto dto, int id)
     {
-        bool? collectionUpdated = _service.Update(dto, id);
+        bool? collectionUpdated = await _service.UpdateAsync(dto, id);
         if (collectionUpdated is null)
             return NotFound();
         return (bool)collectionUpdated ? Ok() : BadRequest();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteCollection(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        bool? collectionDeleted = _service.Delete(id);
+        bool? collectionDeleted = await _service.DeleteAsync(id);
         if (collectionDeleted is null)
             return NotFound();
         return (bool)collectionDeleted ? NoContent() : BadRequest();

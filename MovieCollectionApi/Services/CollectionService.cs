@@ -13,46 +13,46 @@ public class CollectionService
         _repository = repository;
     }
 
-    public List<Collection> GetAll()
+    public async Task<List<Collection>> GetAllAsync()
     {
-        return _repository.GetAll();
+        return await _repository.GetAllAsync();
     }
 
-    public Collection? GetOne(int id)
+    public async Task<Collection?> GetOneAsync(int id)
     {
-        return _repository.GetOneById(id);
+        return await _repository.GetOneByIdAsync(id);
     }
 
-    public Collection? GetOne(string title)
+    public async Task<Collection?> GetOne(string title)
     {
-        return _repository.GetOneByTitle(title);
+        return await _repository.GetOneByTitleAsync(title);
     }
     
-    public bool Create(CreateCollectionDto dto)
+    public async Task<bool> CreateAsync(CreateCollectionDto dto)
     {
         // todo: add automapper 
         Collection newCollection = new() {
             Title = dto.Title
         };
-        return _repository.Create(newCollection);
+        return await _repository.CreateAsync(newCollection);
     }
 
-    public bool? Update(UpdateCollectionDto dto, int id)
+    public async Task<bool?> UpdateAsync(UpdateCollectionDto dto, int id)
     {
-        Collection? collection = GetOne(id);
+        Collection? collection = await GetOneAsync(id);
         if (collection is null)
             return null;
 
         // todo: add automapper 
         collection.Title = dto.Title;
-        return _repository.Update(collection);
+        return await _repository.UpdateAsync(collection);
     }
 
-    public bool? Delete(int id)
+    public async Task<bool?> DeleteAsync(int id)
     {
-        Collection? collection = GetOne(id);
+        Collection? collection = await GetOneAsync(id);
         if (collection is null)
             return null;
-        return _repository.Delete(collection);
+        return await _repository.DeleteAsync(collection);
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using MovieCollectionApi.Data;
 using MovieCollectionApi.Models;
 
@@ -12,44 +13,44 @@ public class CollectionRepository : ICollectionRepository
         _context = context;
     }
 
-    public List<Collection> GetAll()
+    public async Task<List<Collection>> GetAllAsync()
     {
-        return _context.Collections.ToList();
+        return await _context.Collections.ToListAsync();
     }
 
-    public Collection? GetOneById(int id)
+    public async Task<Collection?> GetOneByIdAsync(int id)
     {
-        return _context.Collections.FirstOrDefault(collection => collection.Id == id);
+        return await _context.Collections.FirstOrDefaultAsync(collection => collection.Id == id);
     }
 
-    public Collection? GetOneByTitle(string title)
+    public async Task<Collection?> GetOneByTitleAsync(string title)
     {
-        return _context.Collections.FirstOrDefault(collection => collection.Title == title);
+        return await _context.Collections.FirstOrDefaultAsync(collection => collection.Title == title);
     }
 
-    public bool Create(Collection newCollection)
+    public async Task<bool> CreateAsync(Collection newCollection)
     {
-        _context.Add(newCollection);
-        return Save();
+        await _context.AddAsync(newCollection);
+        return await SaveAsync();
     }
 
-    public bool Delete(Collection collection)
+    public async Task<bool> DeleteAsync(Collection collection)
     {
         _context.Collections.Remove(collection);
-        return Save();
+        return await SaveAsync();
     }
 
-    public bool Update(Collection updatedCollection)
+    public async Task<bool> UpdateAsync(Collection updatedCollection)
     {
         _context.Collections.Update(updatedCollection);
-        return Save();
+        return await SaveAsync();
     }
 
-    public bool Save()
+    public async Task<bool> SaveAsync()
     {
         try
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
         catch
         {
