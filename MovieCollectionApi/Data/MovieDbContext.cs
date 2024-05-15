@@ -19,4 +19,15 @@ public class MovieDbContext : DbContext
     {   
         optionsBuilder.UseSqlite(_config["db_string"]);
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Movie>()
+            .Property(movie => movie.Id)
+            .ValueGeneratedNever();
+        
+        modelBuilder.Entity<Collection>()
+            .HasMany(c => c.Movies)
+            .WithMany();
+    }
 }

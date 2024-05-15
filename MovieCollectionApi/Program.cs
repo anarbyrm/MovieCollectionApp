@@ -18,9 +18,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<HttpClient>();
 
-builder.Services.AddDbContext<MovieDbContext>(ServiceLifetime.Singleton);
-builder.Services.AddSingleton<CollectionRepository>();
-builder.Services.AddSingleton<CollectionService>();
+builder.Services.AddDbContext<MovieDbContext>(ServiceLifetime.Scoped);
+builder.Services.AddScoped<CollectionRepository>();
+builder.Services.AddScoped<CollectionService>();
 builder.Services.AddSingleton<MovieProviderService>();
 
 var app = builder.Build();

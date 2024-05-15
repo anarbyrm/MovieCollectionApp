@@ -8,6 +8,6 @@ public class Collection
     }
 
     public int Id { get; set; }
-    public required string Title { get; set; }
+    public string Title { get; set; }
     public List<Movie> Movies { get; set; }
 }
