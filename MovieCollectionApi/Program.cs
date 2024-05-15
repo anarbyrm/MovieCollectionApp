@@ -1,9 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using MovieCollectionApi.Data;
 using MovieCollectionApi.Dto;
-using MovieCollectionApi.Repository;
-using MovieCollectionApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,12 +13,8 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<HttpClient>();
-builder.Services.AddDbContext<MovieDbContext>(ServiceLifetime.Scoped);
-builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<CollectionService>();
-builder.Services.AddSingleton<MovieProviderService>();
+// Application internal services
+builder.Services.RegisterApplicationServices();
 
 var app = builder.Build();
 
