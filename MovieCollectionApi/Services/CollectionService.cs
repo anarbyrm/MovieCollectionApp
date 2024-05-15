@@ -7,13 +7,18 @@ namespace MovieCollectionApi.Services;
 
 public class CollectionService
 {
-    public readonly CollectionRepository _repository;
-    public readonly MovieProviderService _movieService;
+    public readonly ICollectionRepository _repository;
+    public readonly MovieProviderService _movieExternalService;
+    public readonly IMovieRepository _movieRepository;
 
-    public CollectionService(CollectionRepository repository, MovieProviderService movieService)
+    public CollectionService(
+        ICollectionRepository repository, 
+        MovieProviderService movieExternalService,
+        IMovieRepository movieRepository)
     {
         _repository = repository;
-        _movieService = movieService;
+        _movieExternalService = movieExternalService;
+        _movieRepository = movieRepository;
     }
 
     public async Task<List<ListCollectionDto>> GetAllAsync(string? query)
@@ -62,20 +67,30 @@ public class CollectionService
     public async Task<bool?> AddMovieToCollection(int collectionId, int movieId)
     {
         Collection? collection = await _repository.GetCollectionByIdAsync(collectionId, includeRelations: true);
-        var rawMovieData = await _movieService.FetchMovieDetailById(movieId);
+        var rawMovieData = await _movieExternalService.FetchMovieDetailById(movieId);
         if (collection is null || rawMovieData is null)
             return null;
 
         var movieData = JsonSerializer.Deserialize<MovieConvertDto>(rawMovieData);
+        bool movieExists = await _movieRepository.CheckMovieExistsAsync(movieId);
+        Movie? movie = null;
 
-        Movie movie = new()
+        if (!movieExists) {
+            movie = new()
+            {
+                Id = movieId,
+                ImdbId = movieData.imdb_id,
+                Title = movieData.title,
+                Overview = movieData.overview,
+                PosterPath = movieData.poster_path
+            };
+        }
+        else
         {
-            Id = movieData.id,
-            ImdbId = movieData.imdb_id,
-            Title = movieData.title,
-            Overview = movieData.overview,
-            PosterPath = movieData.poster_path
-        };
+            movie = await _movieRepository.FetchMovieById(movieId);
+        }
+
+        if (movie is null) { return null; }
         return await _repository.AddMovieToCollection(collection, movie);
     }
 
