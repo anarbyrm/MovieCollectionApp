@@ -53,4 +53,21 @@ public class CollectionsController : ControllerBase
             return NotFound();
         return (bool)collectionDeleted ? NoContent() : BadRequest();
     }
+
+    [HttpPost("{collectionId}/movies")]
+    public async Task<IActionResult> AddMovie(int collectionId, [FromQuery] int movieId)
+    {
+        var done = await _service.AddMovieToCollection(collectionId, movieId);
+        if (done is null)
+            return NotFound("Collection or Movie with specified Id is not found.");
+        else if (done is false)
+            return BadRequest();
+        return Created();
+    }
+
+    [HttpDelete("{collectionId}/movies/{movieId}")]
+    public IActionResult RemoveMovie(int collectionId, int movieId)
+    {
+        return null;
+    }
 }

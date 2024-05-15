@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MovieCollectionApi.Data;
+using MovieCollectionApi.Dto;
 using MovieCollectionApi.Models;
 
 namespace MovieCollectionApi.Repository;
@@ -21,9 +22,30 @@ public class CollectionRepository : ICollectionRepository
         return await collectionQuery.ToListAsync();
     }
 
-    public async Task<Collection?> GetOneByIdAsync(int id)
+    public async Task<Collection?> GetCollectionByIdAsync(int id, bool includeRelations = false)
     {
-        return await _context.Collections.FirstOrDefaultAsync(collection => collection.Id == id);
+        IQueryable<Collection> collections = _context.Collections;
+        if (includeRelations)
+            collections = collections.Include(c => c.Movies);
+        return await collections.FirstOrDefaultAsync(c => c.Id == id);
+    }
+
+    public async Task<bool> AddMovieToCollection(Collection collection, Movie movie)
+    {
+        collection.Movies.Add(movie);
+        return await SaveAsync();
+    }
+
+    public Movie? GetCollectionMovieById(Collection collection, int movieId)
+    {
+        Movie? movie = collection.Movies.Find(movie => movie.Id == movieId);
+        return movie;
+    }
+
+    public async Task<bool> DeleteMovieFromCollection(Collection collection, Movie movie)
+    {
+        collection.Movies.Remove(movie);
+        return await SaveAsync();
     }
 
     public async Task<bool> CreateAsync(Collection newCollection)
