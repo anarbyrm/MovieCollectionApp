@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using MovieCollectionApi.Dto;
 using MovieCollectionApi.Services;
@@ -62,12 +63,14 @@ public class CollectionsController : ControllerBase
             return NotFound("Collection or Movie with specified Id is not found.");
         else if (done is false)
             return BadRequest();
-        return Created();
+        return StatusCode((int)HttpStatusCode.Created);
     }
 
     [HttpDelete("{collectionId}/movies/{movieId}")]
-    public IActionResult RemoveMovie(int collectionId, int movieId)
+    public async Task<IActionResult> RemoveMovie(int collectionId, int movieId)
     {
-        return null;
+        var done = await _service.DeleteMovieFromCollection(collectionId, movieId);
+        if (done is null) { return BadRequest(); }
+        return NoContent();
     }
 }
