@@ -17,9 +17,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<HttpClient>();
-
 builder.Services.AddDbContext<MovieDbContext>(ServiceLifetime.Scoped);
-builder.Services.AddScoped<CollectionRepository>();
+builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<CollectionService>();
 builder.Services.AddSingleton<MovieProviderService>();
 
