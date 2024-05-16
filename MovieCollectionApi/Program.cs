@@ -1,20 +1,13 @@
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using MovieCollectionApi.Dto;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services
-        .AddFluentValidationAutoValidation()
-        .AddValidatorsFromAssemblyContaining<CreateCollectionDto>();
+// Application internal services
+builder.Services.AddApplicationServices();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Application internal services
-builder.Services.RegisterApplicationServices();
 
 var app = builder.Build();
 
@@ -24,6 +17,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
+
+app.MapIdentityApi<IdentityUser>()
+    .WithTags("Auth");
+
 app.MapControllers();
+
 app.Run();

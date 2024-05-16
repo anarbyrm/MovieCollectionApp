@@ -1,15 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using MovieCollectionApi.Data;
-using MovieCollectionApi.Dto;
 using MovieCollectionApi.Models;
 
 namespace MovieCollectionApi.Repository;
 
 public class CollectionRepository : ICollectionRepository
 {   
-    private readonly MovieDbContext _context;
+    private readonly ApplicationDbContext _context;
 
-    public CollectionRepository(MovieDbContext context)
+    public CollectionRepository(ApplicationDbContext context)
     {
         _context = context;
     }

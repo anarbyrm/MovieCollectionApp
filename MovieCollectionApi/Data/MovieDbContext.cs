@@ -1,13 +1,21 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MovieCollectionApi.Models;
 
 namespace MovieCollectionApi.Data;
 
-public class MovieDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext
 {   
     private readonly IConfiguration _config;
 
-    public MovieDbContext(IConfiguration config)
+    public ApplicationDbContext(IConfiguration config)
+    {
+        _config = config;
+    }
+
+    public ApplicationDbContext(IConfiguration config, DbContextOptions<ApplicationDbContext> options) 
+        : base(options)
     {
         _config = config;
     }
@@ -22,6 +30,8 @@ public class MovieDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Movie>()
             .Property(movie => movie.Id)
             .ValueGeneratedNever();
