@@ -13,6 +13,7 @@ public static class ServiceRegistration
     public static void AddApplicationServices(this IServiceCollection services)
     {
         services.AddSingleton<HttpClient>();
+        services.AddHttpContextAccessor();
         services.AddDbContext<ApplicationDbContext>(ServiceLifetime.Scoped);
 
         RegisterAuth(services);

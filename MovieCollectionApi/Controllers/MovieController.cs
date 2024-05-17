@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieCollectionApi.Services;
 
@@ -5,6 +6,7 @@ namespace MovieCollectionApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
+[Authorize]
 public class MoviesController : ControllerBase
 {
     private readonly MovieProviderService _movieProviderService;

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.Json;
 using MovieCollectionApi.Dto;
 using MovieCollectionApi.Models;
@@ -10,15 +11,19 @@ public class CollectionService
     public readonly ICollectionRepository _repository;
     public readonly MovieProviderService _movieExternalService;
     public readonly IMovieRepository _movieRepository;
+    public readonly string? currentUserId;
 
     public CollectionService(
         ICollectionRepository repository, 
         MovieProviderService movieExternalService,
-        IMovieRepository movieRepository)
+        IMovieRepository movieRepository,
+        IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
         _movieExternalService = movieExternalService;
         _movieRepository = movieRepository;
+        
+        currentUserId = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 
     public async Task<List<ListCollectionDto>> GetAllAsync(string? query)
@@ -27,7 +32,8 @@ public class CollectionService
         return collections
             .Select(collection => new ListCollectionDto {
                 Id = collection.Id,
-                Title = collection.Title
+                Title = collection.Title,
+                UserId = collection.UserId
             }).ToList();
     }
 
@@ -36,12 +42,14 @@ public class CollectionService
         return await _repository.GetCollectionByIdAsync(id, includeRelations: true);
     }
     
-    public async Task<bool> CreateAsync(CreateCollectionDto dto)
+    public async Task<bool?> CreateAsync(CreateCollectionDto dto)
     {
+        if (currentUserId is null) { return null; }
         // todo: add automapper 
         Collection newCollection = new() {
             Title = dto.Title
         };
+        newCollection.UserId = currentUserId;
         return await _repository.CreateAsync(newCollection);
     }
 

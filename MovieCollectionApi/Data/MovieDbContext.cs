@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MovieCollectionApi.Models;
@@ -38,6 +37,10 @@ public class ApplicationDbContext : IdentityDbContext
         
         modelBuilder.Entity<Collection>()
             .HasMany(c => c.Movies)
+            .WithMany();
+
+        modelBuilder.Entity<Collection>()
+            .HasOne(c => c.User)
             .WithMany();
     }
 }

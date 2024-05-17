@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieCollectionApi.Dto;
 using MovieCollectionApi.Services;
@@ -7,6 +8,7 @@ namespace MovieCollectionApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
+[Authorize]
 public class CollectionsController : ControllerBase
 {
     public readonly CollectionService _service;
@@ -33,8 +35,9 @@ public class CollectionsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateCollectionDto dto)
     {
-        bool collectionCreated = await _service.CreateAsync(dto);
-        return collectionCreated ? Created() : BadRequest();
+        bool? collectionCreated = await _service.CreateAsync(dto);
+        if (collectionCreated is null || !(bool)collectionCreated) { return BadRequest(); }
+        return StatusCode((int)HttpStatusCode.Created);
     }
 
     [HttpPut("{id}")]

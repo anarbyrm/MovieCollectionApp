@@ -4,10 +4,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddEndpointsApiExplorer();
+
 // Application internal services
 builder.Services.AddApplicationServices();
-
-builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
